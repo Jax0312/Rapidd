@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:rapidd/login.dart';
+import 'package:rapidd/registration.dart';
 
 void main() {
   runApp(MyApp());
@@ -14,7 +16,10 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(),
+      home: Scaffold(body: RegistrationPage(),),
+
+
     );
   }
+
 }
