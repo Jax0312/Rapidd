@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-
+import 'package:rapidd/login.dart';
 import 'package:rapidd/mainPage.dart';
-
-
-
+import 'package:rapidd/registration.dart';
 
 void main() async {
   runApp(MyApp());
@@ -22,7 +20,7 @@ class _MyAppState extends State<MyApp> {
 
       home: Scaffold(
         resizeToAvoidBottomInset: false,
-        body: MainPage(),
+        body: LoginPage(),
       ),
     );
   }
