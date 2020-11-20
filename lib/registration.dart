@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rapidd/login.dart';
 
 class RegistrationPage extends StatefulWidget {
   @override
@@ -23,7 +24,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Spacer(
-                flex:3,
+                flex: 3,
               ),
               Container(
                 height: size.height * 0.2,
@@ -43,7 +44,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   FlatButton(
                     child: Text('Log in'),
                     color: Colors.white,
-                    onPressed: () {/** */},
+                    onPressed: () {
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) => LoginPage()));
+                    },
                   ),
                   FlatButton(
                     child: Text('Register'),

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:rapidd/mainPage.dart';
+import 'package:rapidd/registration.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -6,10 +9,22 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPage extends State<LoginPage> {
+  SharedPreferences prefs;
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  static final key = new GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+    getSpInstance();
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
+      key: key,
       body: SafeArea(
         child: Container(
           decoration: BoxDecoration(
@@ -23,7 +38,7 @@ class _LoginPage extends State<LoginPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Spacer(
-                flex:3,
+                flex: 3,
               ),
               Container(
                 height: size.height * 0.2,
@@ -48,7 +63,12 @@ class _LoginPage extends State<LoginPage> {
                   FlatButton(
                     child: Text('Register'),
                     color: Colors.white,
-                    onPressed: () {/** */},
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => RegistrationPage()));
+                    },
                   ),
                 ],
               ),
@@ -57,6 +77,7 @@ class _LoginPage extends State<LoginPage> {
                 color: Colors.white,
                 width: size.width * 0.9,
                 child: TextField(
+                  controller: emailController,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey),
@@ -70,6 +91,7 @@ class _LoginPage extends State<LoginPage> {
                 color: Colors.white,
                 width: size.width * 0.9,
                 child: TextField(
+                  controller: passwordController,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey),
@@ -84,7 +106,22 @@ class _LoginPage extends State<LoginPage> {
               FlatButton(
                 child: Text('Log in'),
                 color: Color(0xFFC4C4C4),
-                onPressed: () {/** */},
+                onPressed: () {
+                  if (emailController.text != "" &&
+                      passwordController.text != "") {
+                    prefs.setBool('isLogin', true);
+                    prefs.setString('email', emailController.text);
+                    prefs.setString('password', passwordController.text);
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => MainPage()));
+                  } else {
+                    key.currentState.showSnackBar(SnackBar(
+                        content: Text(
+                          "Enter Email and Password",
+                          textAlign: TextAlign.center,
+                        )));
+                  }
+                },
               ),
               Spacer(
                 flex: 10,
@@ -94,5 +131,9 @@ class _LoginPage extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  Future getSpInstance() async {
+    prefs = await SharedPreferences.getInstance();
   }
 }
