@@ -11,9 +11,13 @@ class _WalletPageState extends State<WalletPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Text("Wallet"),
-      ),
-    );
+        body: Text("List"),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {},
+          child: Icon(
+            Icons.add,
+          ),
+          backgroundColor: Colors.red,
+        ));
   }
 }

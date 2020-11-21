@@ -29,7 +29,8 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         resizeToAvoidBottomInset: false,
-        body: _initiated == false
+        body:
+        _initiated == false
             ? Center(
                 child: LinearProgressIndicator(),
               )

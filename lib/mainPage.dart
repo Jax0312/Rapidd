@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:rapidd/foodPage.dart';
 import 'package:rapidd/rentalPage.dart';
 import 'package:rapidd/shopPage.dart';
@@ -31,8 +32,9 @@ class _MainPageState extends State<MainPage> {
 
   Widget _bottomNavigationBar(int selectedIndex) => BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        backgroundColor: Color(0xFFF53B24),
-        selectedItemColor: Colors.white,
+        backgroundColor: Colors.white,
+        selectedItemColor: Colors.red,
+        unselectedItemColor: Colors.black,
         onTap: (int index) {
           setState(
             () {
@@ -44,13 +46,13 @@ class _MainPageState extends State<MainPage> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: ImageIcon(
-              AssetImage("assets/images/DRUMSTICK.png"),
+              AssetImage("assets/images/New_Drumstick.png"),
             ),
             label: "Food",
           ),
           BottomNavigationBarItem(
             icon: ImageIcon(
-              AssetImage("assets/images/KEY.png"),
+              AssetImage("assets/images/New_Key.png"),
             ),
             label: "Rental",
           ),
@@ -62,9 +64,9 @@ class _MainPageState extends State<MainPage> {
           ),
           BottomNavigationBarItem(
             icon: ImageIcon(
-              AssetImage("assets/images/WALLET.png"),
+              AssetImage("assets/images/list logo.png"),
             ),
-            label: "Wallet",
+            label: "List",
           ),
         ],
       );
@@ -73,18 +75,18 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFFF53B24),
+        backgroundColor: Colors.white,
         actions: [
           IconButton(
-              icon: Icon(
-                Icons.settings,
+              icon: ImageIcon(
+                AssetImage("assets/images/SETTINGS LOGO 1.png"),
                 color: Colors.black,
               ),
               iconSize: 40,
               onPressed: null),
           VerticalDivider(
             width: 1,
-            thickness: 3,
+            thickness: 1,
             color: Colors.black,
           ),
           Expanded(
@@ -109,8 +111,8 @@ class _MainPageState extends State<MainPage> {
               iconSize: 40,
               onPressed: null),
           VerticalDivider(
-            width: 1,
-            thickness: 3,
+            width: 0.5,
+            thickness: 1,
             color: Colors.black,
           ),
           IconButton(
