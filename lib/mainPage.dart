@@ -3,7 +3,9 @@ import 'package:flutter/rendering.dart';
 import 'package:rapidd/foodPage.dart';
 import 'package:rapidd/rentalPage.dart';
 import 'package:rapidd/shopPage.dart';
-import 'package:rapidd/walletPage.dart';
+import 'package:rapidd/singleton.dart';
+import 'package:rapidd/listPage.dart';
+import 'package:qrscan/qrscan.dart' as Scanner;
 
 class MainPage extends StatefulWidget {
   @override
@@ -21,13 +23,15 @@ class _MainPageState extends State<MainPage> {
     ShopPage(
       key: PageStorageKey('RentalPage'),
     ),
-    WalletPage(
+    ListPage(
       key: PageStorageKey('RentalPage'),
     ),
   ];
 
   final PageStorageBucket bucket = PageStorageBucket();
-
+  final TextEditingController _searchText = new TextEditingController();
+  var singleton = Singleton.instance;
+  final GlobalKey<ScaffoldState> _key = new GlobalKey<ScaffoldState>();
   int _selectedIndex = 0;
 
   Widget _bottomNavigationBar(int selectedIndex) => BottomNavigationBar(
@@ -72,8 +76,15 @@ class _MainPageState extends State<MainPage> {
       );
 
   @override
+  void initState() {
+    super.initState();
+    singleton.searchFilterController = _searchText;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _key,
       appBar: AppBar(
         backgroundColor: Colors.white,
         actions: [
@@ -83,7 +94,7 @@ class _MainPageState extends State<MainPage> {
                 color: Colors.black,
               ),
               iconSize: 40,
-              onPressed: null),
+              onPressed: () => _key.currentState.openDrawer()),
           VerticalDivider(
             width: 1,
             thickness: 1,
@@ -92,6 +103,7 @@ class _MainPageState extends State<MainPage> {
           Expanded(
             child: TextField(
               cursorColor: Colors.white,
+              controller: _searchText,
               decoration: InputDecoration(
                 hintText: "SEARCH",
                 border: InputBorder.none,
@@ -104,12 +116,12 @@ class _MainPageState extends State<MainPage> {
             ),
           ),
           IconButton(
-              icon: Icon(
-                Icons.search,
-                color: Colors.black,
-              ),
-              iconSize: 40,
-              onPressed: null),
+            icon: Icon(
+              Icons.search,
+              color: Colors.black,
+            ),
+            iconSize: 40,
+          ),
           VerticalDivider(
             width: 0.5,
             thickness: 1,
@@ -121,8 +133,51 @@ class _MainPageState extends State<MainPage> {
                 color: Colors.black,
               ),
               iconSize: 55,
-              onPressed: null),
+              onPressed: () {
+                _scan();
+              }),
         ],
+      ),
+      drawer: Drawer(
+        elevation: 8,
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              child: Row(children: [
+                CircleAvatar(
+                  backgroundColor: Colors.white,
+                  radius: 40.0,
+                ),
+                Spacer(
+                  flex: 1,
+                ),
+                Column(
+                  children: [
+                    Spacer(flex: 2),
+                    Text('Email'),
+                    Spacer(
+                      flex: 1,
+                    ),
+                    Text('Username'),
+                    Spacer(flex: 2),
+                  ],
+                ),
+                Spacer(
+                  flex: 2,
+                ),
+              ]),
+              decoration: BoxDecoration(
+                color: Colors.red,
+              ),
+            ),
+            ListTile(title: Text('Item 1'), leading: Icon(Icons.cancel)),
+            ListTile(
+              title: Text('Log out'),
+              leading: Icon(Icons.directions_walk),
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: _bottomNavigationBar(_selectedIndex),
       body: PageStorage(
@@ -130,5 +185,10 @@ class _MainPageState extends State<MainPage> {
         bucket: bucket,
       ),
     );
+  }
+
+  Future _scan() async {
+    String barcode = await Scanner.scan();
+    print(barcode);
   }
 }

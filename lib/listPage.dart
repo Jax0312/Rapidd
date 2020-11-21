@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
-class WalletPage extends StatefulWidget {
-  const WalletPage({Key key}) : super(key: key);
+class ListPage extends StatefulWidget {
+  const ListPage({Key key}) : super(key: key);
 
   @override
-  _WalletPageState createState() => _WalletPageState();
+  _ListPageState createState() => _ListPageState();
 }
 
-class _WalletPageState extends State<WalletPage> {
+class _ListPageState extends State<ListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Text("List"),
+        body: Center(child: Text("List")),
         floatingActionButton: FloatingActionButton(
           onPressed: () {},
           child: Icon(

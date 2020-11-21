@@ -28,8 +28,8 @@ dependencies:
   firebase_storage: ^5.0.1
   cupertino_icons: ^1.0.0
   shared_preferences: ^0.5.12
-  scrollable_positioned_list: ^0.1.8
   sticky_grouped_list: ^1.3.0
+  qrscan: ^0.2.17
 
 dev_dependencies:
   flutter_test:

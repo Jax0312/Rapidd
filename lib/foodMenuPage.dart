@@ -30,8 +30,8 @@ class _FoodMenuPageState extends State<FoodMenuPage> {
     widget.categories.sort((a, b) => a.toString().compareTo(b.toString()));
     topBarButton = widget.categories.map(
       (category) {
-        buttonID++;
-        return topButton(category, buttonID);
+        this.buttonID++;
+        return topButton(category, this.buttonID);
       },
     ).toList();
     readData();
@@ -70,9 +70,9 @@ class _FoodMenuPageState extends State<FoodMenuPage> {
                           child: Container(
                             width: size.width * 0.25,
                             decoration: BoxDecoration(
-                              color: Colors.blue[300],
+                              color: Colors.red,
                               border: Border.all(
-                                color: Colors.blue[300],
+                                color: Colors.red,
                               ),
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20.0)),
@@ -147,14 +147,11 @@ class _FoodMenuPageState extends State<FoodMenuPage> {
   Widget topButton(String _text, int _buttonID) {
     return FlatButton(
         onPressed: () {
-          print("Index: " +
-              topBarIndex[_buttonID].toString() +
-              " ID: " +
-              _buttonID.toString());
-          scrollToIndex(topBarIndex[buttonID]);
+          scrollToIndex(topBarIndex[_buttonID]);
         },
         child: Text(_text));
   }
+
 }
 
 class Element {

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:rapidd/foodMenuPage.dart';
+import 'package:rapidd/singleton.dart';
 
 class FoodPage extends StatefulWidget {
   const FoodPage({Key key}) : super(key: key);
@@ -12,14 +13,14 @@ class FoodPage extends StatefulWidget {
 }
 
 class _FoodPageState extends State<FoodPage> {
-  List<String> imgUrls = List<String>();
-  String url = "";
-  Future _data;
+  List<Menu> menuList = List<Menu>();
+  var singleton = Singleton.instance;
+  String searchFilterText = '';
 
   Future<String> getStorageRef(String imgUrl) async {
     var storage = FirebaseStorage.instance;
     Reference reference = storage.refFromURL(imgUrl);
-    url = await reference.getDownloadURL();
+    String url = await reference.getDownloadURL();
     return Future.value(url);
   }
 
@@ -30,116 +31,129 @@ class _FoodPageState extends State<FoodPage> {
         .collection("Food")
         .orderBy("Res Name", descending: false)
         .get();
-    setState(() {});
     return querySnapshot.docs;
   }
 
-  Future imageLoading() async {
+  Future dataLoading() async {
     getFireStore().then((data) async {
-      List<String> urls = new List(data.length);
       for (int i = 0; i < data.length; i++) {
-        urls[i] = await getStorageRef(data[i].get('img url'));
+        String url = await getStorageRef(data[i].get('img url'));
+        setState(() {
+          menuList.add(Menu(data[i].get('Res Name'), url, data[i].documentID,
+              data[i].get('categories')));
+        });
       }
-      setState(() {
-        this.imgUrls = List.from(urls);
-      });
     });
   }
 
   @override
   void initState() {
     super.initState();
-    _data = getFireStore();
-    imageLoading();
+    dataLoading();
+    singleton.searchFilterController.addListener(() {
+      setState(() {
+        searchFilterText = singleton.searchFilterController.text;
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      body: Row(
+      body: Column(
         children: [
-          Expanded(
-            child: FutureBuilder(
-              future: _data,
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  print(snapshot.error.toString());
-                }
-                if (snapshot.connectionState == ConnectionState.waiting ||
-                    !snapshot.hasData) {
-                  return Center(
-                    child: Text("Loading......"),
-                  );
-                } else {
-                  return ListView.builder(
-                    itemCount: snapshot.data.length,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => FoodMenuPage(
-                                      snapshot.data[index].documentID,
-                                      List.from(snapshot.data[index]
-                                          .get('categories')))));
-                        },
-                        child: Container(
-                          height: size.height * 0.15,
-                          margin: EdgeInsets.all(6),
-                          color: Colors.white,
-                          child: Row(
-                            children: [
-                              imageWithErrorHandling(index, size),
-                              Spacer(),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 10, right: 10, top: 2, bottom: 50),
-                                child: Text(
-                                  snapshot.data[index].data()['Res Name'],
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20),
-                                ),
-                              ),
-                              Spacer(),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                }
-              },
+          Container(
+            padding: EdgeInsets.all(10),
+            height: size.height * 0.1,
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "Restaurants",
+                style: TextStyle(fontSize: 30),
+              ),
             ),
+          ),
+          Expanded(
+            child: menuBuilder(size),
           ),
         ],
       ),
     );
   }
 
-  // ignore: missing_return
-  Widget imageWithErrorHandling(int index, var size) {
-    try {
-      if (imgUrls[index].isNotEmpty) {
-        return Container(
-          height: size.height * 0.25,
-          width: size.width * 0.5,
-          child: Image.network(
-            imgUrls[index],
-            fit: BoxFit.fill,
-          ),
-        );
+  Widget menuBuilder(var size) {
+    if (menuList != null) {
+      List<Menu> filteredList = List<Menu>();
+      if (searchFilterText.isNotEmpty) {
+        for (int i = 0; i < menuList.length; i++) {
+          if (menuList[i]
+              .vendorName
+              .toLowerCase()
+              .contains(searchFilterText.toLowerCase())) {
+            filteredList.add(menuList[i]);
+          }
+        }
+      } else {
+        filteredList = menuList;
       }
-    } on RangeError {
-      return Container(
-        height: size.height * 0.25,
-        width: size.width * 0.5,
-        child: Center(
-          child: CircularProgressIndicator(),
-        ),
+      return ListView.builder(
+        itemCount: filteredList.length,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => FoodMenuPage(
+                    filteredList[index].docID,
+                    List.from(filteredList[index].categories),
+                  ),
+                ),
+              );
+            },
+            child: Container(
+              height: size.height * 0.15,
+              margin: EdgeInsets.all(6),
+              color: Colors.white,
+              child: Row(
+                children: [
+                  Container(
+                    height: size.height * 0.25,
+                    width: size.width * 0.5,
+                    child: Image.network(
+                      filteredList[index].imgUrl,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                  Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 10, right: 10, top: 2, bottom: 50),
+                    child: Text(
+                      filteredList[index].vendorName,
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    ),
+                  ),
+                  Spacer(),
+                ],
+              ),
+            ),
+          );
+        },
       );
+    } else {
+      return CircularProgressIndicator();
     }
   }
+}
+
+class Menu {
+  String vendorName;
+  String imgUrl;
+  String docID;
+  List<dynamic> categories;
+
+  Menu(this.vendorName, this.imgUrl, this.docID, this.categories);
 }
