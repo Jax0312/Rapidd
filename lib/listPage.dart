@@ -85,8 +85,13 @@ class _ListPageState extends State<ListPage> {
                               decoration:
                                   InputDecoration(hintText: "List Name"),
                             ),
-                            FlatButton(
+                            Spacer(),
+                            OutlineButton(
                               child: Text("Save"),
+                              borderSide: BorderSide(color: Colors.red),
+                              shape: StadiumBorder(),
+                              splashColor: Colors.red,
+                              disabledBorderColor:Colors.red,
                               onPressed: () {
                                 if (listNameController.text.isNotEmpty) {
                                   listName.add(listNameController.text);
