@@ -37,8 +37,10 @@ class _MainPageState extends State<MainPage> {
   Widget _bottomNavigationBar(int selectedIndex) => BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,
-        selectedItemColor: Colors.red,
         unselectedItemColor: Colors.black,
+        selectedItemColor: Colors.red,
+        selectedLabelStyle: TextStyle(color: Colors.red),
+        unselectedLabelStyle: TextStyle(color: Colors.black),
         onTap: (int index) {
           setState(
             () {
@@ -46,32 +48,27 @@ class _MainPageState extends State<MainPage> {
             },
           );
         },
-        currentIndex: selectedIndex,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: ImageIcon(
-              AssetImage("assets/images/New_Drumstick.png"),
-            ),
-            label: "Food",
-          ),
-          BottomNavigationBarItem(
-            icon: ImageIcon(
-              AssetImage("assets/images/New_Key.png"),
-            ),
-            label: "Rental",
-          ),
-          BottomNavigationBarItem(
-            icon: ImageIcon(
-              AssetImage("assets/images/SHOPPING CART.png"),
-            ),
-            label: "Shop",
-          ),
-          BottomNavigationBarItem(
-            icon: ImageIcon(
-              AssetImage("assets/images/list logo.png"),
-            ),
-            label: "List",
-          ),
+        items: [
+          new BottomNavigationBarItem(
+              icon: _selectedIndex == 0
+                  ? ImageIcon(AssetImage('assets/images/DRUMSTICK red.png'), color: Colors.red,)
+                  : ImageIcon(AssetImage('assets/images/DRUMSTICK black.png'), color: Colors.black,),
+              label: ('Food')),
+          new BottomNavigationBarItem(
+              icon: _selectedIndex == 1
+                  ? ImageIcon(AssetImage('assets/images/red key.png'), color: Colors.red,)
+                  : ImageIcon(AssetImage('assets/images/black key.png'), color: Colors.black,),
+              label: ('Rental')),
+          new BottomNavigationBarItem(
+              icon: _selectedIndex == 2
+                  ? ImageIcon(AssetImage('assets/images/shopping cart_red.png'), color: Colors.red,)
+                  : ImageIcon(AssetImage('assets/images/shopping cart_black.png'), color: Colors.black,),
+              label: ('Shop')),
+          new BottomNavigationBarItem(
+              icon: _selectedIndex == 3
+                  ? ImageIcon(AssetImage('assets/images/list logo (red).png'), color: Colors.red,)
+                  : ImageIcon(AssetImage('assets/images/list logo (black).png'), color: Colors.black,),
+              label: ('List'))
         ],
       );
 
