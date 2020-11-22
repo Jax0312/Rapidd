@@ -6,6 +6,7 @@ import 'package:rapidd/shopPage.dart';
 import 'package:rapidd/singleton.dart';
 import 'package:rapidd/listPage.dart';
 import 'package:qrscan/qrscan.dart' as Scanner;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -16,12 +17,14 @@ class _MainPageState extends State<MainPage> {
   final List<Widget> pages = [
     FoodPage(
       key: PageStorageKey('FoodPage'),
+      pageId: 0,
     ),
     RentalPage(
       key: PageStorageKey('RentalPage'),
     ),
     ShopPage(
       key: PageStorageKey('RentalPage'),
+      pageId: 2,
     ),
     ListPage(
       key: PageStorageKey('RentalPage'),
@@ -31,6 +34,7 @@ class _MainPageState extends State<MainPage> {
   final PageStorageBucket bucket = PageStorageBucket();
   final TextEditingController _searchText = new TextEditingController();
   var singleton = Singleton.instance;
+  var prefs;
   final GlobalKey<ScaffoldState> _key = new GlobalKey<ScaffoldState>();
   int _selectedIndex = 0;
 
@@ -45,6 +49,7 @@ class _MainPageState extends State<MainPage> {
           setState(
             () {
               _selectedIndex = index;
+              singleton.currentPage = index;
             },
           );
         },
@@ -76,6 +81,7 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
     singleton.searchFilterController = _searchText;
+    getSpInstance();
   }
 
   @override
@@ -187,5 +193,12 @@ class _MainPageState extends State<MainPage> {
   Future _scan() async {
     String barcode = await Scanner.scan();
     print(barcode);
+  }
+
+  Future getSpInstance() async {
+    Singleton.instance.prefs = await SharedPreferences.getInstance();
+    if (Singleton.instance.prefs.getStringList('listName') == null) {
+      Singleton.instance.prefs.setStringList('listName', List<String>());
+    }
   }
 }

@@ -6,7 +6,9 @@ import 'package:rapidd/foodMenuPage.dart';
 import 'package:rapidd/singleton.dart';
 
 class FoodPage extends StatefulWidget {
-  const FoodPage({Key key}) : super(key: key);
+  final pageId;
+
+  const FoodPage({Key key, this.pageId}) : super(key: key);
 
   @override
   _FoodPageState createState() => _FoodPageState();
@@ -51,9 +53,11 @@ class _FoodPageState extends State<FoodPage> {
     super.initState();
     dataLoading();
     singleton.searchFilterController.addListener(() {
-      setState(() {
-        searchFilterText = singleton.searchFilterController.text;
-      });
+      if (singleton.currentPage == widget.pageId) {
+        setState(() {
+          searchFilterText = singleton.searchFilterController.text;
+        });
+      }
     });
   }
 
