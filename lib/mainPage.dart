@@ -41,8 +41,6 @@ class _MainPageState extends State<MainPage> {
   Widget _bottomNavigationBar(int selectedIndex) => BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,
-        unselectedItemColor: Colors.black,
-        selectedItemColor: Colors.red,
         selectedLabelStyle: TextStyle(color: Colors.red),
         unselectedLabelStyle: TextStyle(color: Colors.black),
         onTap: (int index) {
@@ -56,23 +54,23 @@ class _MainPageState extends State<MainPage> {
         items: [
           new BottomNavigationBarItem(
               icon: _selectedIndex == 0
-                  ? ImageIcon(AssetImage('assets/images/DRUMSTICK red.png'), color: Colors.red,)
-                  : ImageIcon(AssetImage('assets/images/DRUMSTICK black.png'), color: Colors.black,),
+                  ?new Image.asset('assets/images/DRUMSTICK red.png', scale: 4)
+                  :new Image.asset('assets/images/DRUMSTICK black.png', scale: 4),
               label: ('Food')),
           new BottomNavigationBarItem(
               icon: _selectedIndex == 1
-                  ? ImageIcon(AssetImage('assets/images/red key.png'), color: Colors.red,)
-                  : ImageIcon(AssetImage('assets/images/black key.png'), color: Colors.black,),
+                  ? new Image.asset('assets/images/KEY RED.png', scale: 4)
+                  : new Image.asset('assets/images/KEY BLACK.png', scale: 4),
               label: ('Rental')),
           new BottomNavigationBarItem(
               icon: _selectedIndex == 2
-                  ? ImageIcon(AssetImage('assets/images/shopping cart_red.png'), color: Colors.red,)
-                  : ImageIcon(AssetImage('assets/images/shopping cart_black.png'), color: Colors.black,),
+                  ? new Image.asset('assets/images/shopping cart red.png', scale: 4)
+                  : new Image.asset('assets/images/shopping cart black.png', scale: 4),
               label: ('Shop')),
           new BottomNavigationBarItem(
               icon: _selectedIndex == 3
-                  ? ImageIcon(AssetImage('assets/images/list logo (red).png'), color: Colors.red,)
-                  : ImageIcon(AssetImage('assets/images/list logo (black).png'), color: Colors.black,),
+                  ? new Image.asset('assets/images/list logo (red).png', scale: 4)
+                  : new Image.asset('assets/images/list logo (black).png',scale: 4),
               label: ('List'))
         ],
       );
