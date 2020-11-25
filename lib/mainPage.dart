@@ -39,10 +39,11 @@ class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
 
   Widget _bottomNavigationBar(int selectedIndex) => BottomNavigationBar(
+    currentIndex: _selectedIndex,
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,
-        selectedLabelStyle: TextStyle(color: Colors.red),
-        unselectedLabelStyle: TextStyle(color: Colors.black),
+        selectedItemColor: Colors.red,
+        unselectedItemColor: Colors.black,
         onTap: (int index) {
           setState(
             () {
@@ -54,9 +55,9 @@ class _MainPageState extends State<MainPage> {
         items: [
           new BottomNavigationBarItem(
               icon: _selectedIndex == 0
-                  ?new Image.asset('assets/images/DRUMSTICK red.png', scale: 4)
-                  :new Image.asset('assets/images/DRUMSTICK black.png', scale: 4),
-              label: ('Food')),
+                  ? new Image.asset('assets/images/DRUMSTICK red.png', scale: 4)
+                  : new Image.asset('assets/images/DRUMSTICK black.png', scale: 4),
+              label: "Food"),
           new BottomNavigationBarItem(
               icon: _selectedIndex == 1
                   ? new Image.asset('assets/images/KEY RED.png', scale: 4)
@@ -67,12 +68,14 @@ class _MainPageState extends State<MainPage> {
                   ? new Image.asset('assets/images/shopping cart red.png', scale: 4)
                   : new Image.asset('assets/images/shopping cart black.png', scale: 4),
               label: ('Shop')),
-          new BottomNavigationBarItem(
-              icon: _selectedIndex == 3
-                  ? new Image.asset('assets/images/list logo (red).png', scale: 4)
-                  : new Image.asset('assets/images/list logo (black).png',scale: 4),
-              label: ('List'))
-        ],
+      new BottomNavigationBarItem(
+          icon: _selectedIndex == 3
+              ? new Image.asset('assets/images/list logo (red).png',
+              scale: 4)
+              : new Image.asset('assets/images/list logo (black).png',
+              scale: 4),
+          label: ('List'))
+    ],
       );
 
   @override
@@ -195,8 +198,8 @@ class _MainPageState extends State<MainPage> {
 
   Future getSpInstance() async {
     Singleton.instance.prefs = await SharedPreferences.getInstance();
-    if (Singleton.instance.prefs.getStringList('listName') == null) {
-      Singleton.instance.prefs.setStringList('listName', List<String>());
+    if (Singleton.instance.prefs.getStringList('listNames') == null) {
+      Singleton.instance.prefs.setStringList('listNames', List<String>());
     }
   }
 }

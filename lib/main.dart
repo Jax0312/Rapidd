@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:rapidd/login.dart';
 import 'package:rapidd/mainPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:rapidd/shoppingList.dart';
 
-void main() async {
+void main() {
   runApp(MyApp());
 }
 
@@ -32,11 +35,11 @@ class _MyAppState extends State<MyApp> {
         body:
         _initiated == false
             ? Center(
-                child: LinearProgressIndicator(),
-              )
+          child: LinearProgressIndicator(),
+        )
             : _isLogin == true
-                ? MainPage()
-                : LoginPage(),
+            ? MainPage()
+            : LoginPage(),
       ),
     );
   }
