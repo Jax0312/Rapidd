@@ -1,12 +1,12 @@
-import 'dart:convert';
-
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:rapidd/login.dart';
 import 'package:rapidd/mainPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:rapidd/shoppingList.dart';
+
 
 void main() {
+  Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -32,10 +32,12 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         resizeToAvoidBottomInset: false,
-        body:
-        _initiated == false
+        body: _initiated == false
             ? Center(
-          child: LinearProgressIndicator(),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 50, right: 50),
+            child: new LinearProgressIndicator(backgroundColor: Colors.red,),
+          ),
         )
             : _isLogin == true
             ? MainPage()

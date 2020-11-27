@@ -68,14 +68,14 @@ class _FoodMenuPageState extends State<FoodMenuPage> {
                         child: Align(
                           alignment: Alignment.center,
                           child: Container(
-                            width: size.width * 0.25,
+                            width: size.width * 0.5,
                             decoration: BoxDecoration(
                               color: Colors.red,
                               border: Border.all(
                                 color: Colors.red,
                               ),
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(20.0)),
+                              BorderRadius.all(Radius.circular(20.0)),
                             ),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:rapidd/foodOrderPage.dart';
 import 'package:rapidd/foodPage.dart';
 import 'package:rapidd/rentalPage.dart';
 import 'package:rapidd/shopPage.dart';
@@ -193,7 +194,10 @@ class _MainPageState extends State<MainPage> {
 
   Future _scan() async {
     String barcode = await Scanner.scan();
-    print(barcode);
+    List<String> qrContent = barcode.split("?");
+    if (qrContent[0] == "rapidd") {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => FoodOrderPage(qrContent[1])));
+    }
   }
 
   Future getSpInstance() async {
