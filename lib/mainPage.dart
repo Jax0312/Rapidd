@@ -102,8 +102,8 @@ class _MainPageState extends State<MainPage> {
               onPressed: () => _key.currentState.openDrawer()),
           VerticalDivider(
             width: 1,
-            thickness: 1,
-            color: Colors.black,
+            thickness: 2,
+            color: Colors.red,
           ),
           Expanded(
             child: TextField(
@@ -129,8 +129,8 @@ class _MainPageState extends State<MainPage> {
           ),
           VerticalDivider(
             width: 0.5,
-            thickness: 1,
-            color: Colors.black,
+            thickness: 2,
+            color: Colors.red,
           ),
           IconButton(
               icon: ImageIcon(
