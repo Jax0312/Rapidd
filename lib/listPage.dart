@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rapidd/shoppingList.dart';
@@ -84,7 +83,9 @@ class _ListPageState extends State<ListPage> {
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
+                backgroundColor: Colors.white,
                 content: Container(
+                  padding:EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0),
                   height: size.height * 0.3,
                   child: Stack(
                     overflow: Overflow.visible,

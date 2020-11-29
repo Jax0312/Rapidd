@@ -82,6 +82,9 @@ class _ShopItemPageState extends State<ShopItemPage> {
                         child: Column(
                           children: [
                             Text("Select a List to add to"),
+                            Spacer(
+                              flex:3,
+                            ),
                             Container(
                               height: size.height * 0.1,
                               width: size.width * 0.5,
@@ -100,17 +103,37 @@ class _ShopItemPageState extends State<ShopItemPage> {
                                 },
                               ),
                             ),
-                            OutlineButton(
-                              child: Text("Add"),
-                              highlightedBorderColor: Colors.red,
-                              borderSide: BorderSide(color: Colors.red),
-                              shape: StadiumBorder(),
-                              splashColor: Colors.red,
-                              highlightColor: Colors.white70,
-                              disabledBorderColor: Colors.red,
-                              onPressed: () => encodeListToJson(dropDownValue),
+                            Spacer(
+                              flex: 4,
                             ),
-                          ],
+                            Row(
+                              children: [
+                                Spacer(),
+                                FlatButton(
+                                    onPressed: () {
+                                      Navigator.of(context);
+                                    },
+                                    child: Text('cancel',
+                                      style: TextStyle(
+                                        color: Colors.red),
+                                    )
+                                ),
+                                FlatButton(
+                                  onPressed: () {
+                                    Navigator.of(context);
+                                  },
+                                  child: Text('Add',
+                                    style: TextStyle(
+                                    color: Colors.red,
+                                    ),
+                                )
+                                ),
+                        ],
+                            ),
+                            Spacer(
+                              flex: 3,
+                            ),
+                            ],
                         ),
                       );
                     }),
@@ -346,3 +369,13 @@ class SelectedItem {
   String name = "";
   int quantity = 0;
 }
+/*OutlineButton(
+                              child: Text("Add"),
+                              highlightedBorderColor: Colors.red,
+                              borderSide: BorderSide(color: Colors.red),
+                              shape: StadiumBorder(),
+                              splashColor: Colors.red,
+                              highlightColor: Colors.white70,
+                              disabledBorderColor: Colors.red,
+                              onPressed: () => encodeListToJson(dropDownValue),
+                            ),*/
