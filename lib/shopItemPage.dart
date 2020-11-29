@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:rapidd/shoppingList.dart';
 import 'package:rapidd/singleton.dart';
 import 'package:sticky_grouped_list/sticky_grouped_list.dart';
@@ -81,15 +82,25 @@ class _ShopItemPageState extends State<ShopItemPage> {
                         width: size.width * 0.7,
                         child: Column(
                           children: [
+                            Spacer(
+                              flex:2,
+                            ),
                             Text("Select a List to add to"),
                             Spacer(
-                              flex:3,
+                              flex:2,
                             ),
                             Container(
                               height: size.height * 0.1,
-                              width: size.width * 0.5,
-                              child: DropdownButton(
+                              width: size.width * 0.55,
+                              child: DropdownButtonFormField(
                                 value: dropDownValue,
+                                decoration: InputDecoration(
+                                  enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors.red),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(30)))
+                                ),
                                 items: listNames.map<DropdownMenuItem<String>>((String value) {
                                   return DropdownMenuItem<String>(
                                     value: value,
@@ -113,7 +124,7 @@ class _ShopItemPageState extends State<ShopItemPage> {
                                     onPressed: () {
                                       Navigator.of(context);
                                     },
-                                    child: Text('cancel',
+                                    child: Text('Cancel',
                                       style: TextStyle(
                                         color: Colors.red),
                                     )
