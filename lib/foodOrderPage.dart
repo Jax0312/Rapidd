@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:rapidd/orderCompletePage.dart';
 import 'package:sticky_grouped_list/sticky_grouped_list.dart';
 
 class FoodOrderPage extends StatefulWidget {
@@ -16,6 +17,8 @@ class FoodOrderPage extends StatefulWidget {
 class _FoodOrderPageState extends State<FoodOrderPage> {
   List<int> topBarIndex;
   int buttonID = -1;
+  double totalPrice = 0;
+  int totalItemCount = 0;
   final db = FirebaseFirestore.instance;
   List<dynamic> topBarButton;
   GroupedItemScrollController _itemScrollController = GroupedItemScrollController();
@@ -30,9 +33,7 @@ class _FoodOrderPageState extends State<FoodOrderPage> {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery
-        .of(context)
-        .size;
+    var size = MediaQuery.of(context).size;
     return Scaffold(
       body: Center(
         child: SafeArea(
@@ -50,116 +51,151 @@ class _FoodOrderPageState extends State<FoodOrderPage> {
                 thickness: 5,
               ),
               Expanded(
-                child: _elements != null
-                    ? StickyGroupedListView<Element, String>(
-                  elements: _elements,
-                  order: StickyGroupedListOrder.ASC,
-                  itemScrollController: _itemScrollController,
-                  groupBy: (Element element) => element.category,
-                  groupSeparatorBuilder: (Element element) =>
-                      Container(
-                        height: size.height * 0.07,
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: Container(
-                            width: size.width * 0.5,
-                            decoration: BoxDecoration(
-                              color: Colors.red,
-                              border: Border.all(
+                child: Stack(children: [
+                  _elements != null
+                      ? StickyGroupedListView<Element, String>(
+                    elements: _elements,
+                    order: StickyGroupedListOrder.ASC,
+                    itemScrollController: _itemScrollController,
+                    groupBy: (Element element) => element.category,
+                    groupSeparatorBuilder: (Element element) =>
+                        Container(
+                          height: size.height * 0.07,
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Container(
+                              width: size.width * 0.5,
+                              decoration: BoxDecoration(
                                 color: Colors.red,
+                                border: Border.all(
+                                  color: Colors.red,
+                                ),
+                                borderRadius: BorderRadius.all(Radius.circular(20.0)),
                               ),
-                              borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                element.category,
-                                textAlign: TextAlign.center,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  element.category,
+                                  textAlign: TextAlign.center,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                  itemBuilder: (context, Element element) {
-                    return Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6.0),
-                      ),
-                      elevation: 8.0,
-                      margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
-                      child: Stack(
-                        overflow: Overflow.visible,
-                        children: [
-                          ListTile(
-                            contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                            leading: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Text(
-                                  element.name,
-                                  maxLines: 2,
-                                ),
-                                Text(element.price),
-                              ],
-                            ),
-                            trailing: Container(
-                              width: size.width * 0.2,
-                              child: Row(
+                    itemBuilder: (context, Element element) {
+                      return Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6.0),
+                        ),
+                        elevation: 8.0,
+                        margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+                        child: Stack(
+                          overflow: Overflow.visible,
+                          children: [
+                            ListTile(
+                              contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                              leading: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  Expanded(
-                                    child: IconButton(
-                                      icon: Icon(
-                                        Icons.add,
-                                        size: 20,
-                                      ),
-                                      onPressed: () {
-                                        if (element.quantity > 0) {
-                                          setState(() {
-                                            element.quantity -= 1;
-                                          });
-                                        }
-                                      },
-                                    ),
+                                  Text(
+                                    element.name,
+                                    maxLines: 2,
                                   ),
-                                  Expanded(
-                                    child: IconButton(
-                                      icon: Icon(
-                                        Icons.add,
-                                        size: 20,
-                                      ),
-                                      onPressed: () {
-                                        setState(() {
-                                          element.quantity += 1;
-                                        });
-                                      },
-                                    ),
-                                  ),
+                                  Text(element.price),
                                 ],
                               ),
-                            ),
-                          ),
-                          Visibility(
-                            visible: element.quantity != 0,
-                            child: Positioned(
-                              right: -5,
-                              top: -5.0,
-                              child: CircleAvatar(
-                                radius: 15,
-                                child: Text(
-                                  element.quantity.toString(),
-                                  style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+                              trailing: Container(
+                                width: size.width * 0.2,
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: IconButton(
+                                        icon: ImageIcon(AssetImage("assets/images/minusIcon.png")),
+                                        onPressed: () {
+                                          if (element.quantity > 0) {
+                                            setState(() {
+                                              element.quantity -= 1;
+                                              totalItemCount -= 1;
+                                              totalPrice -= double.parse(element.price.split(" ")[1]);
+                                            });
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: IconButton(
+                                        icon: Icon(
+                                          Icons.add,
+                                          size: 20,
+                                        ),
+                                        onPressed: () {
+                                          setState(() {
+                                            element.quantity += 1;
+                                            totalItemCount += 1;
+                                            totalPrice += double.parse(element.price.split(" ")[1]);
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                backgroundColor: Colors.red,
                               ),
                             ),
-                          ),
-                        ],
+                            Visibility(
+                              visible: element.quantity != 0,
+                              child: Positioned(
+                                right: -5,
+                                top: -5.0,
+                                child: CircleAvatar(
+                                  radius: 15,
+                                  child: Text(
+                                    element.quantity.toString(),
+                                    style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+                                  ),
+                                  backgroundColor: Colors.red,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  )
+                      : CircularProgressIndicator(),
+                  Visibility(
+                    visible: totalItemCount != 0,
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        color: Colors.red,
+                        height: size.height * 0.08,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(
+                              "$totalItemCount items",
+                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              "Total Price: RM ${totalPrice.toStringAsFixed(2)}",
+                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => OrderCompletePage()));
+                              },
+                              child: Text(
+                                "Checkout",
+                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    );
-                  },
-                )
-                    : CircularProgressIndicator(),
+                    ),
+                  ),
+                ]),
               )
             ],
           ),

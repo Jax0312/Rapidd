@@ -22,13 +22,14 @@ class _MainPageState extends State<MainPage> {
     ),
     RentalPage(
       key: PageStorageKey('RentalPage'),
+      pageId: 1,
     ),
     ShopPage(
-      key: PageStorageKey('RentalPage'),
+      key: PageStorageKey('ShopPage'),
       pageId: 2,
     ),
     ListPage(
-      key: PageStorageKey('RentalPage'),
+      key: PageStorageKey('ListPage'),
     ),
   ];
 

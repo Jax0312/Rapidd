@@ -10,6 +10,8 @@ import 'package:rapidd/shoppingList.dart';
 import 'package:rapidd/singleton.dart';
 import 'package:sticky_grouped_list/sticky_grouped_list.dart';
 
+import 'mainPage.dart';
+
 class ShopItemPage extends StatefulWidget {
   final doc;
   final List<String> categories;
@@ -122,7 +124,7 @@ class _ShopItemPageState extends State<ShopItemPage> {
                                 Spacer(),
                                 FlatButton(
                                     onPressed: () {
-                                      Navigator.of(context);
+                                      Navigator.of(context).pop();
                                     },
                                     child: Text('Cancel',
                                       style: TextStyle(
@@ -131,8 +133,8 @@ class _ShopItemPageState extends State<ShopItemPage> {
                                 ),
                                 FlatButton(
                                   onPressed: () {
-                                    Navigator.of(context);
-                                  },
+                                    encodeListToJson(dropDownValue);
+                                    },
                                   child: Text('Add',
                                     style: TextStyle(
                                     color: Colors.red,
@@ -179,7 +181,7 @@ class _ShopItemPageState extends State<ShopItemPage> {
                   child: Align(
                     alignment: Alignment.center,
                     child: Container(
-                      width: size.width * 0.25,
+                      width: size.width * 0.5,
                       decoration: BoxDecoration(
                         color: Colors.red,
                         border: Border.all(
@@ -361,6 +363,7 @@ class _ShopItemPageState extends State<ShopItemPage> {
     Singleton.instance.prefs.setString(selectedList, jsonString);
     jsonString = Singleton.instance.prefs.getString(selectedList);
     print(jsonString);
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainPage()));
   }
 }
 

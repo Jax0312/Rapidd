@@ -85,7 +85,6 @@ class _ListPageState extends State<ListPage> {
               return AlertDialog(
                 backgroundColor: Colors.white,
                 content: Container(
-                  padding:EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0),
                   height: size.height * 0.3,
                   child: Stack(
                     overflow: Overflow.visible,
@@ -140,10 +139,10 @@ class _ListPageState extends State<ListPage> {
                                   setState(() {
                                     listName.add(listNameController.text);
                                     Singleton.instance.prefs.setStringList('listNames', listName);
-                                    Singleton.instance.prefs.setString(
-                                        listNameController.text, jsonEncode(ShoppingList(List<String>(), List<int>())));
-                                    listNameController.clear();
+                                    Singleton.instance.prefs
+                                        .setString(listNameController.text, jsonEncode(ShoppingList(List<String>(), List<int>())));
                                     Singleton.instance.prefs.setStringList(listNameController.text + "bool", List<String>());
+                                    listNameController.clear();
                                     Navigator.of(context).pop();
                                   });
                                 }
@@ -189,7 +188,7 @@ class _ListPageState extends State<ListPage> {
           content: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
               return Container(
-                height: size.height * 0.8,
+                height: size.height * 0.7,
                 width: size.width * 0.8,
                 decoration: BoxDecoration(
                     color: Colors.transparent, image: DecorationImage(image: AssetImage("assets/images/shoppingList paper.png"), fit: BoxFit.cover)),
